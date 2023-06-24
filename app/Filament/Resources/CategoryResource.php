@@ -19,6 +19,8 @@ class CategoryResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-document';
 
+    protected static ?string $navigationGroup = 'General';
+
     public static function getEloquentQuery(): Builder
     {
         return static::getModel()::query()->whereBelongsTo(auth()->user())->latest();
