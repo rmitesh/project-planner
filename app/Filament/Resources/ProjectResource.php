@@ -23,6 +23,8 @@ class ProjectResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-folder';
 
+    protected static ?string $navigationGroup = 'Projects';
+
     public static function getEloquentQuery(): Builder
     {
         return static::getModel()::query()->whereBelongsTo(auth()->user())->latest();
@@ -125,7 +127,7 @@ class ProjectResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            RelationManagers\TasksRelationManager::class,
         ];
     }
     
@@ -136,5 +138,5 @@ class ProjectResource extends Resource
             'create' => Pages\CreateProject::route('/create'),
             'edit' => Pages\EditProject::route('/{record}/edit'),
         ];
-    }    
+    }
 }

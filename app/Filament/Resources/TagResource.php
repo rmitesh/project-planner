@@ -19,6 +19,8 @@ class TagResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-hashtag';
 
+    protected static ?string $navigationGroup = 'General';
+
     public static function getEloquentQuery(): Builder
     {
         return static::getModel()::query()->whereBelongsTo(auth()->user())->latest();
