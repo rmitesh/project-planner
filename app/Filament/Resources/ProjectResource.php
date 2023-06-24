@@ -5,7 +5,10 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\CategoryResource;
 use App\Filament\Resources\ProjectResource\Pages;
 use App\Filament\Resources\ProjectResource\RelationManagers;
+use App\Filament\Resources\TagResource;
+use App\Models\Category;
 use App\Models\Project;
+use App\Models\Tag;
 use Filament\Forms;
 use Filament\Resources\Form;
 use Filament\Resources\Resource;
@@ -57,13 +60,23 @@ class ProjectResource extends Resource
                             Forms\Components\Card::make()
                                 ->schema([
                                     Forms\Components\DatePicker::make('start_at')
-                                        ->format('d/m/Y'),
+                                        ->format('Y-m-d'),
 
                                     Forms\Components\Select::make('category_id')
                                         ->label('Category')
                                         ->searchable()
                                         ->preload()
-                                        ->options(CategoryResource::getEloquentQuery()->pluck('name', 'id')),
+                                        ->options(CategoryResource::getEloquentQuery()->pluck('name', 'id'))
+                                        ->createOptionForm(CategoryResource::getForm())
+                                        ->createOptionAction(function (Forms\Components\Actions\Action $action) {
+                                            return $action
+                                                ->modalHeading('Creating new category')
+                                                ->modalButton('Create');
+                                        })
+                                        ->createOptionUsing(function (Category $category, array $data) {
+                                            $data['user_id'] = auth()->id();
+                                            return $category::create($data)->id;
+                                        }),
 
                                     Forms\Components\Select::make('tags')
                                         ->multiple()
@@ -71,6 +84,16 @@ class ProjectResource extends Resource
                                         ->preload()
                                         ->relationship('tags', 'name', function ($query) {
                                             return $query->where('user_id', auth()->id());
+                                        })
+                                        ->createOptionForm(TagResource::getForm())
+                                        ->createOptionAction(function (Forms\Components\Actions\Action $action) {
+                                            return $action
+                                                ->modalHeading('Creating new tag')
+                                                ->modalButton('Create');
+                                        })
+                                        ->createOptionUsing(function (Tag $tag, array $data) {
+                                            $data['user_id'] = auth()->id();
+                                            return $tag::create($data)->id;
                                         }),
                                 ]),
                         ])
@@ -84,6 +107,7 @@ class ProjectResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('title'),
+                Tables\Columns\TextColumn::make('category.name'),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime('dS F, Y h:i A'),
             ])
@@ -91,7 +115,7 @@ class ProjectResource extends Resource
                 //
             ])
             ->actions([
-                // Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\DeleteBulkAction::make(),
