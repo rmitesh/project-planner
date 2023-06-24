@@ -19,7 +19,7 @@ class Project extends Model
     ];
 
     protected $casts = [
-        'start_at' => 'date',
+        'start_at' => 'date:Y-m-d',
     ];
 
     /* Relationships */

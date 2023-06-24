@@ -24,18 +24,23 @@ class CategoryResource extends Resource
         return static::getModel()::query()->whereBelongsTo(auth()->user())->latest();
     }
 
+    public static function getForm(): array
+    {
+        return [
+            Forms\Components\Card::make()
+                ->schema([
+                    Forms\Components\TextInput::make('name')
+                        ->placeholder('Name')
+                        ->maxLength(100)
+                        ->required(),
+                ]),
+        ];
+    }
+
     public static function form(Form $form): Form
     {
         return $form
-            ->schema([
-                Forms\Components\Card::make()
-                    ->schema([
-                        Forms\Components\TextInput::make('name')
-                            ->placeholder('Name')
-                            ->maxLength(100)
-                            ->required(),
-                    ]),
-            ]);
+            ->schema(static::getForm());
     }
 
     public static function table(Table $table): Table
