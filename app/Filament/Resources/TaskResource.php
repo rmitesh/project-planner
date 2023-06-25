@@ -6,7 +6,6 @@ use App\Filament\Resources\TaskResource\Pages;
 use App\Filament\Resources\TaskResource\RelationManagers;
 use App\Models\Task;
 use Filament\Forms;
-use Filament\Pages\Page;
 use Filament\Resources\Form;
 use Filament\Resources\Resource;
 use Filament\Resources\Table;
@@ -19,13 +18,22 @@ class TaskResource extends Resource
 {
     protected static ?string $model = Task::class;
 
+    protected static ?string $pluralModelLabel = 'All Tasks';
+
     protected static ?string $navigationIcon = 'heroicon-o-template';
 
     protected static ?string $navigationGroup = 'Projects';
 
-    public static function getEloquentQuery(): Builder
+    public static function getEloquentQuery( $accessFrom = null ): Builder
     {
-        return static::getModel()::query()->whereBelongsTo(auth()->user())->latest();
+        $builder = static::getModel()::query()->whereBelongsTo(auth()->user());
+        if ( !$accessFrom ) {
+            $builder = $builder
+                // ->where('created_at', 'NOT LIKE', '%'. now()->format('Y-m-d') .'%')
+                ->oldest('status')->latest();
+        }
+
+        return $builder;
     }
 
     public static function getForm(): array
@@ -74,8 +82,11 @@ class TaskResource extends Resource
     {
         return $table
             ->columns([
+                Tables\Columns\CheckboxColumn::make('status'),
+
                 Tables\Columns\TextColumn::make('note')
-                    ->limit(60),
+                    ->limit(40),
+
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime('dS F, Y h:i A'),
             ])
@@ -89,7 +100,7 @@ class TaskResource extends Resource
                 Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
-                Tables\Actions\DeleteBulkAction::make(),
+                // Tables\Actions\DeleteBulkAction::make(),
             ]);
     }
     

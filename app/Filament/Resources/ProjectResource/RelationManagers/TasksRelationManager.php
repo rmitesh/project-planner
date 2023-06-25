@@ -4,13 +4,14 @@ namespace App\Filament\Resources\ProjectResource\RelationManagers;
 
 use App\Filament\Resources\TaskResource;
 use Filament\Forms;
-use Filament\Resources\Form;
 use Filament\Pages\Page;
+use Filament\Resources\Form;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Resources\Table;
 use Filament\Tables;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class TasksRelationManager extends RelationManager
@@ -18,6 +19,13 @@ class TasksRelationManager extends RelationManager
     protected static string $relationship = 'tasks';
 
     protected static ?string $recordTitleAttribute = 'note';
+
+    public function getRelationship(): Relation | Builder
+    {
+        return parent::getRelationship()
+            ->whereBelongsTo(auth()->user())
+            ->oldest('status')->latest();
+    }
 
     public static function form(Form $form): Form
     {
@@ -32,7 +40,7 @@ class TasksRelationManager extends RelationManager
                 Tables\Columns\CheckboxColumn::make('status'),
 
                 Tables\Columns\TextColumn::make('note')
-                    ->limit(60),
+                    ->limit(40),
 
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime('dS F, Y h:i A'),
