@@ -6,10 +6,25 @@ use App\Filament\Resources\TaskResource;
 use Filament\Pages\Actions;
 use Filament\Resources\Pages\ManageRecords;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 class ManageTasks extends ManageRecords
 {
     protected static string $resource = TaskResource::class;
+
+    public function created($name)
+    {
+        if (Str::of($name)->contains(['mountedActionData'])) {
+            $this->emit('updateTodayTaskEvent');
+        }
+    }
+
+    public function updated($name)
+    {
+        if (Str::of($name)->contains(['mountedTableAction'])) {
+            $this->emit('updateTodayTaskEvent');
+        }
+    }
 
     protected function getActions(): array
     {
@@ -21,6 +36,13 @@ class ManageTasks extends ManageRecords
                     return static::getModel()::create($data);
                 })
                 ->successNotificationTitle('Task has been created.'),
+        ];
+    }
+
+    protected function getHeaderWidgets(): array
+    {
+        return [
+            // TaskResource\Widgets\TodayTask::class,
         ];
     }
 }
