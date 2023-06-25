@@ -9,6 +9,7 @@ use Filament\Forms;
 use Filament\Tables;
 use Filament\Widgets\TableWidget as BaseWidget;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 
 class TodayTask extends BaseWidget
 {
@@ -67,7 +68,12 @@ class TodayTask extends BaseWidget
                 ->limit(40),
 
             Tables\Columns\TextColumn::make('project.title')
-                ->placeholder('-'),
+                ->placeholder('-')
+                ->url(function (Model $record) {
+                    if ( $record->project ) {
+                        return route('filament.resources.projects.edit', ['record' => $record->project]);
+                    }
+                }, true),
             
             Tables\Columns\TextColumn::make('created_at')
                 ->dateTime('dS F, Y h:i A'),
