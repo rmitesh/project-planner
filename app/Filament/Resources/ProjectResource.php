@@ -25,6 +25,8 @@ class ProjectResource extends Resource
 
     protected static ?string $navigationGroup = 'Projects';
 
+    protected static ?string $recordTitleAttribute = 'title';
+
     public static function getEloquentQuery(): Builder
     {
         return static::getModel()::query()->whereBelongsTo(auth()->user())->latest();
@@ -61,6 +63,10 @@ class ProjectResource extends Resource
                         ->schema([
                             Forms\Components\Card::make()
                                 ->schema([
+                                    Forms\Components\Select::make('priority')
+                                        ->searchable()
+                                        ->options(Project::getPriorities()),
+
                                     Forms\Components\DatePicker::make('start_at')
                                         ->format('Y-m-d'),
 
@@ -109,6 +115,11 @@ class ProjectResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('title'),
+
+                Tables\Columns\BadgeColumn::make('priority')
+                    ->enum(Project::getPriorities())
+                    ->colors(Project::getColors()),
+
                 Tables\Columns\TextColumn::make('category.name'),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime('dS F, Y h:i A'),

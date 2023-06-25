@@ -55,7 +55,14 @@ class TodayTask extends BaseWidget
             Tables\Actions\EditAction::make()
                 ->form(TaskResource::getForm())
                 ->slideOver()
-                ->successNotificationTitle('Task has been updated.'),
+                ->successNotificationTitle('Task has been updated.')
+                ->using(function (Model $record, array $data): Model {
+                    $data['completed_at'] = $data['status'] ? now() : null;
+
+                    $record->update($data);
+                
+                    return $record;
+                }),
         ];
     }
 
@@ -63,6 +70,10 @@ class TodayTask extends BaseWidget
     {
         return [
             Tables\Columns\CheckboxColumn::make('status'),
+
+            Tables\Columns\BadgeColumn::make('priority')
+                ->enum(Task::getPriorities())
+                ->colors(Task::getColors()),
 
             Tables\Columns\TextColumn::make('note')
                 ->limit(40),
