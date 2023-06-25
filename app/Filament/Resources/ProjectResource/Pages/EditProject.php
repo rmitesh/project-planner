@@ -10,6 +10,15 @@ class EditProject extends EditRecord
 {
     protected static string $resource = ProjectResource::class;
 
+    protected function mutateFormDataBeforeSave(array $data): array
+    {
+        if ( $data['status'] ) {
+            $data['completed_at'] = now();
+        }
+     
+        return $data;
+    }
+
     protected function getSavedNotificationTitle(): ?string
     {
         return 'Project changes has been saved.';

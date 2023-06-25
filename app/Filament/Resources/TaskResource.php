@@ -58,6 +58,10 @@ class TaskResource extends Resource
                         ->preload()
                         ->relationship('project', 'title'),
 
+                    Forms\Components\Select::make('priority')
+                        ->searchable()
+                        ->options(Task::getPriorities()),
+
                     Forms\Components\Placeholder::make('created_at')
                         ->visible(fn ($livewire) => $livewire->mountedTableAction === 'edit')
                         ->content(fn (Model $record) => date('dS F, Y', strtotime($record->created_at))),
@@ -84,6 +88,10 @@ class TaskResource extends Resource
             ->columns([
                 Tables\Columns\CheckboxColumn::make('status'),
 
+                Tables\Columns\BadgeColumn::make('priority')
+                    ->enum(Task::getPriorities())
+                    ->colors(Task::getColors()),
+
                 Tables\Columns\TextColumn::make('note')
                     ->limit(40),
 
@@ -95,6 +103,13 @@ class TaskResource extends Resource
             ])
             ->actions([
                 Tables\Actions\EditAction::make()
+                    ->using(function (Model $record, array $data): Model {
+                        $data['completed_at'] = $data['status'] ? now() : null;
+
+                        $record->update($data);
+                 
+                        return $record;
+                    })
                     ->slideOver()
                     ->successNotificationTitle('Task has been updated.'),
                 Tables\Actions\DeleteAction::make(),

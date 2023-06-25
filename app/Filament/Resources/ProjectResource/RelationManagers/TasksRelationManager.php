@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\ProjectResource\RelationManagers;
 
 use App\Filament\Resources\TaskResource;
+use App\Models\Task;
 use Filament\Forms;
 use Filament\Pages\Page;
 use Filament\Resources\Form;
@@ -38,6 +39,10 @@ class TasksRelationManager extends RelationManager
         return $table
             ->columns([
                 Tables\Columns\CheckboxColumn::make('status'),
+
+                Tables\Columns\BadgeColumn::make('priority')
+                    ->enum(Task::getPriorities())
+                    ->colors(Task::getColors()),
 
                 Tables\Columns\TextColumn::make('note')
                     ->limit(40),
