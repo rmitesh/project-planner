@@ -27,6 +27,8 @@ class ProjectResource extends Resource
 
     protected static ?string $recordTitleAttribute = 'title';
 
+    protected static ?int $navigationSort = 2;
+
     public static function getEloquentQuery(): Builder
     {
         return static::getModel()::query()->whereBelongsTo(auth()->user())->latest();
@@ -41,6 +43,7 @@ class ProjectResource extends Resource
                         Forms\Components\Card::make()
                             ->schema([
                                 Forms\Components\TextInput::make('title')
+                                    ->autocomplete('off')
                                     ->placeholder('Title')
                                     ->maxLength(100)
                                     ->autofocus()
@@ -117,10 +120,12 @@ class ProjectResource extends Resource
                 Tables\Columns\TextColumn::make('title'),
 
                 Tables\Columns\BadgeColumn::make('priority')
+                    ->placeholder('N/A')
                     ->enum(Project::getPriorities())
                     ->colors(Project::getColors()),
 
-                Tables\Columns\TextColumn::make('category.name'),
+                Tables\Columns\TextColumn::make('category.name')
+                    ->placeholder('N/A'),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime('dS F, Y h:i A'),
             ])

@@ -32,6 +32,7 @@ class TagResource extends Resource
             Forms\Components\Card::make()
                 ->schema([
                     Forms\Components\TextInput::make('name')
+                        ->autocomplete('off')
                         ->placeholder('Name')
                         ->maxLength(100)
                         ->required(),

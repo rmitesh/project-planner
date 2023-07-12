@@ -2,9 +2,9 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\CategoryResource\Pages;
-use App\Filament\Resources\CategoryResource\RelationManagers;
-use App\Models\Category;
+use App\Filament\Resources\PlanCategoryResource\Pages;
+use App\Filament\Resources\PlanCategoryResource\RelationManagers;
+use App\Models\PlanCategory;
 use Filament\Forms;
 use Filament\Resources\Form;
 use Filament\Resources\Resource;
@@ -13,13 +13,15 @@ use Filament\Tables;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
-class CategoryResource extends Resource
+class PlanCategoryResource extends Resource
 {
-    protected static ?string $model = Category::class;
+    protected static ?string $model = PlanCategory::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-document';
+    protected static ?string $navigationIcon = 'heroicon-o-document-add';
 
-    protected static ?string $navigationGroup = 'General';
+    protected static ?string $navigationGroup = 'Reports';
+
+    protected static ?int $navigationSort = 3;
 
     public static function getEloquentQuery(): Builder
     {
@@ -29,14 +31,15 @@ class CategoryResource extends Resource
     public static function getForm(): array
     {
         return [
-            Forms\Components\Card::make()
-                ->schema([
-                    Forms\Components\TextInput::make('name')
-                        ->autocomplete('off')
-                        ->placeholder('Name')
-                        ->maxLength(100)
-                        ->required(),
-                ]),
+            Forms\Components\TextInput::make('name')
+                ->autocomplete('off')
+                ->placeholder('Name')
+                ->required(),
+            Forms\Components\ColorPicker::make('color')
+                ->placeholder('Color')
+                ->required()
+                ->helperText('It will use in Chart.')
+                ->hex(),
         ];
     }
 
@@ -50,10 +53,9 @@ class CategoryResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('name')
-                    ->searchable(),
+                Tables\Columns\TextColumn::make('name'),
+                Tables\Columns\TextColumn::make('color'),
                 Tables\Columns\TextColumn::make('created_at')
-                    ->sortable()
                     ->dateTime('dS F, Y h:i A'),
             ])
             ->filters([
@@ -73,7 +75,7 @@ class CategoryResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ManageCategories::route('/'),
+            'index' => Pages\ManagePlanCategories::route('/'),
         ];
     }    
 }

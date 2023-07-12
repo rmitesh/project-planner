@@ -12,7 +12,7 @@ class EditProject extends EditRecord
 
     protected function mutateFormDataBeforeSave(array $data): array
     {
-        if ( $data['status'] ) {
+        if ( isset($data['status']) ) {
             $data['completed_at'] = now();
         }
      

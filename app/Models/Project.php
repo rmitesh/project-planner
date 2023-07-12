@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Category;
+use App\Models\ProjectPlan;
 use App\Models\Tag;
 use App\Models\Task;
 use App\Models\User;
@@ -73,5 +74,10 @@ class Project extends Model
     public function tasks(): HasMany
     {
         return $this->hasMany(Task::class);
+    }
+
+    public function project_plans(): HasMany
+    {
+        return $this->hasMany(ProjectPlan::class);
     }
 }

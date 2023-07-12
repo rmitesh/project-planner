@@ -22,4 +22,14 @@ class ManageCategories extends ManageRecords
                 ->successNotificationTitle('New category has been created.'),
         ];
     }
+
+    protected function getTableEmptyStateHeading(): ?string
+    {
+        return 'No categories found';
+    }
+
+    protected function getTableEmptyStateDescription(): ?string
+    {
+        return 'Click on "Add category" add new';
+    }
 }

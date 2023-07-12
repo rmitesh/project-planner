@@ -10,6 +10,7 @@ class Dashboard extends BasePage
     protected function getFooterWidgets(): array
     {
         return [
+            Resources\PlanResource\Widgets\PlanChart::class,
             Resources\TaskResource\Widgets\TodayTask::class,
         ];
     }

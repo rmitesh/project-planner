@@ -26,6 +26,16 @@ class TodayTask extends BaseWidget
         return false;
     }
 
+    protected function getTableEmptyStateHeading(): ?string
+    {
+        return 'No tasks found';
+    }
+
+    protected function getTableEmptyStateDescription(): ?string
+    {
+        return 'Click on "New task" add new';
+    }
+
     protected function getTableQuery(): Builder
     {
         return TaskResource::getEloquentQuery('today')

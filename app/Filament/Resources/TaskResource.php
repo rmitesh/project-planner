@@ -24,6 +24,8 @@ class TaskResource extends Resource
 
     protected static ?string $navigationGroup = 'Projects';
 
+    protected static ?int $navigationSort = 1;
+
     public static function getEloquentQuery( $accessFrom = null ): Builder
     {
         $builder = static::getModel()::query()->whereBelongsTo(auth()->user());
@@ -56,7 +58,9 @@ class TaskResource extends Resource
                         ->label('Add to project')
                         ->searchable()
                         ->preload()
-                        ->relationship('project', 'title'),
+                        ->relationship('project', 'title', function ($query)  {
+                            $query->where('user_id', auth()->id());
+                        }),
 
                     Forms\Components\Select::make('priority')
                         ->searchable()
@@ -89,6 +93,7 @@ class TaskResource extends Resource
                 Tables\Columns\CheckboxColumn::make('status'),
 
                 Tables\Columns\BadgeColumn::make('priority')
+                    ->placeholder('N/A')
                     ->enum(Task::getPriorities())
                     ->colors(Task::getColors()),
 

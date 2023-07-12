@@ -39,10 +39,13 @@ class ManageTasks extends ManageRecords
         ];
     }
 
-    protected function getHeaderWidgets(): array
+    protected function getTableEmptyStateHeading(): ?string
     {
-        return [
-            // TaskResource\Widgets\TodayTask::class,
-        ];
+        return 'No tasks found';
+    }
+
+    protected function getTableEmptyStateDescription(): ?string
+    {
+        return 'Click on "New task" add new';
     }
 }
