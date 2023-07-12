@@ -5,6 +5,7 @@ namespace App\Providers;
 use Filament\Facades\Filament;
 use Filament\Navigation\UserMenuItem;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\Schema;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -26,5 +27,7 @@ class AppServiceProvider extends ServiceProvider
                 'account' => UserMenuItem::make()->url(route('filament.pages.my-profile')),
             ]);
         });
+
+        Schema::defaultStringLength(191);
     }
 }

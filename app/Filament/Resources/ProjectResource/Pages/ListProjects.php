@@ -16,4 +16,14 @@ class ListProjects extends ListRecords
             Actions\CreateAction::make(),
         ];
     }
+
+    protected function getTableEmptyStateHeading(): ?string
+    {
+        return 'No projects found';
+    }
+
+    protected function getTableEmptyStateDescription(): ?string
+    {
+        return 'Click on "New Project" add new';
+    }
 }

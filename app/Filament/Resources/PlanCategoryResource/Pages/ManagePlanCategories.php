@@ -1,15 +1,15 @@
 <?php
 
-namespace App\Filament\Resources\TagResource\Pages;
+namespace App\Filament\Resources\PlanCategoryResource\Pages;
 
-use App\Filament\Resources\TagResource;
+use App\Filament\Resources\PlanCategoryResource;
 use Filament\Pages\Actions;
 use Filament\Resources\Pages\ManageRecords;
 use Illuminate\Database\Eloquent\Model;
 
-class ManageTags extends ManageRecords
+class ManagePlanCategories extends ManageRecords
 {
-    protected static string $resource = TagResource::class;
+    protected static string $resource = PlanCategoryResource::class;
 
     protected function getActions(): array
     {
@@ -18,18 +18,17 @@ class ManageTags extends ManageRecords
                 ->using(function (array $data): Model {
                     $data['user_id'] = auth()->id();
                     return static::getModel()::create($data);
-                })
-                ->successNotificationTitle('New tag has been created.'),
+                }),
         ];
     }
 
     protected function getTableEmptyStateHeading(): ?string
     {
-        return 'No tags found';
+        return 'No plan categories found';
     }
 
     protected function getTableEmptyStateDescription(): ?string
     {
-        return 'Click on "Add tag" add new';
+        return 'Click on "Add plan category" add new';
     }
 }
