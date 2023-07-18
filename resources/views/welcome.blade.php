@@ -48,7 +48,7 @@
             @if (Route::has('login'))
                 <div class="sm:fixed sm:top-0 sm:right-0 p-6 text-right">
                     @auth
-                        <a href="{{ url('/home') }}" class="font-semibold text-yellow-600 hover:text-yellow-900 dark:text-yellow-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-blue-500">Home</a>
+                        <a href="{{ route('filament.pages.dashboard') }}" class="font-semibold text-yellow-600 hover:text-yellow-900 dark:text-yellow-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-blue-500">Dashboard</a>
                     @else
                         <a href="{{ route('login') }}" class="font-semibold text-yellow-600 hover:text-yellow-900 dark:text-yellow-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-blue-500">Log in</a>
 
