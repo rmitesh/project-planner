@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\ProgramUser;
 use App\Models\Topic;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -38,5 +39,10 @@ class Program extends Model
     public function topics(): HasMany
     {
         return $this->hasMany(Topic::class);
+    }
+
+    public function programUsers(): HasMany
+    {
+        return $this->hasMany(ProgramUser::class);
     }
 }

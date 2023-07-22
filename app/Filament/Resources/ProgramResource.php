@@ -17,9 +17,9 @@ class ProgramResource extends Resource
 {
     protected static ?string $model = Program::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-collection';
+    protected static ?string $navigationIcon = 'heroicon-o-library';
 
-    protected static ?string $navigationGroup = 'Management';
+    protected static ?string $navigationGroup = 'Programs';
 
     public static function form(Form $form): Form
     {
@@ -75,6 +75,7 @@ class ProgramResource extends Resource
     {
         return [
             RelationManagers\TopicsRelationManager::class,
+            RelationManagers\ProgramUsersRelationManager::class,
         ];
     }
     
@@ -85,5 +86,5 @@ class ProgramResource extends Resource
             'create' => Pages\CreateProgram::route('/create'),
             'edit' => Pages\EditProgram::route('/{record}/edit'),
         ];
-    }    
+    }
 }

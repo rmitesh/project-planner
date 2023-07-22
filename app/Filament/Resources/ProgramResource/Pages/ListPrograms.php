@@ -16,4 +16,9 @@ class ListPrograms extends ListRecords
             Actions\CreateAction::make(),
         ];
     }
+
+    protected function getTableEmptyStateHeading(): ?string
+    {
+        return 'No programs found';
+    }
 }

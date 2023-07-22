@@ -17,9 +17,16 @@ class AssignmentResource extends Resource
 {
     protected static ?string $model = Assignment::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-collection';
+    protected static ?string $navigationIcon = 'heroicon-o-desktop-computer';
 
-    protected static ?string $navigationGroup = 'Management';
+    protected static ?string $navigationGroup = 'Programs';
+
+    public static function getEloquentQuery(): Builder
+    {
+        return static::getModel()::query()->whereHas('userAssignments', function ($query) {
+            $query->whereBelongsTo(auth()->user());
+        })->latest();
+    }
 
     public static function form(Form $form): Form
     {
@@ -91,6 +98,7 @@ class AssignmentResource extends Resource
             ])
             ->actions([
                 Tables\Actions\ActionGroup::make([
+                    Tables\Actions\ViewAction::make(),
                     Tables\Actions\EditAction::make(),
                     Tables\Actions\DeleteAction::make(),
                 ]),
@@ -103,7 +111,7 @@ class AssignmentResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            RelationManagers\UserAssignmentsRelationManager::class
         ];
     }
     

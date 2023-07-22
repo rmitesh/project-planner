@@ -4,6 +4,7 @@ namespace App\Filament\Resources\TaskResource\Widgets;
 
 use App\Filament\Resources\TaskResource;
 use App\Models\Task;
+use App\Models\User;
 use Closure;
 use Filament\Forms;
 use Filament\Tables;
@@ -20,6 +21,14 @@ class TodayTask extends BaseWidget
     protected $listeners = [
         'updateTodayTaskEvent' => '$refresh',
     ];
+
+    public static function canView(): bool
+    {
+        return auth()->user()->hasAnyRole([
+            User::ROLE_SUPER_ADMIN, User::ROLE_PROJECT_MANAGER, User::ROLE_TEAM_LEADER,
+            User::ROLE_TECHNICAL_TEAM_LEADER, User::ROLE_TRAINEE_SOFTWARE_ENGINEER,
+        ]);
+    }
 
     protected function isTablePaginationEnabled(): bool
     {

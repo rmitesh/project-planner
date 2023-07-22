@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\PlanResource\Widgets;
 
 use App\Models\Plan;
+use App\Models\User;
 use Filament\Widgets\PieChartWidget;
 use Illuminate\Support\Carbon;
 
@@ -15,6 +16,14 @@ class PlanChart extends PieChartWidget
     public ?string $filter = 'month';
 
     public ?string $reportHeading;
+
+    public static function canView(): bool
+    {
+        return auth()->user()->hasAnyRole([
+            User::ROLE_SUPER_ADMIN, User::ROLE_PROJECT_MANAGER, User::ROLE_TEAM_LEADER,
+            User::ROLE_TECHNICAL_TEAM_LEADER,
+        ]);
+    }
 
     protected function getFilters(): ?array
     {

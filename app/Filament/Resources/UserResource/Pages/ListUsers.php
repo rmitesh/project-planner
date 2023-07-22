@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Filament\Resources\AssignmentResource\Pages;
+namespace App\Filament\Resources\UserResource\Pages;
 
-use App\Filament\Resources\AssignmentResource;
+use App\Filament\Resources\UserResource;
 use Filament\Pages\Actions;
 use Filament\Resources\Pages\ListRecords;
 
-class ListAssignments extends ListRecords
+class ListUsers extends ListRecords
 {
-    protected static string $resource = AssignmentResource::class;
+    protected static string $resource = UserResource::class;
 
     protected function getActions(): array
     {
@@ -19,6 +19,6 @@ class ListAssignments extends ListRecords
 
     protected function getTableEmptyStateHeading(): ?string
     {
-        return 'No assignments found';
+        return 'No users found';
     }
 }

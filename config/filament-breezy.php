@@ -107,7 +107,7 @@ return [
     | Path to registration Livewire component.
     */
 
-    "registration_component_path" => \JeffGreco13\FilamentBreezy\Http\Livewire\Auth\Register::class,
+    "registration_component_path" => \App\Http\Livewire\Auth\Register::class,
 
     /*
     |--------------------------------------------------------------------------

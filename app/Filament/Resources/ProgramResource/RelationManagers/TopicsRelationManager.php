@@ -68,8 +68,10 @@ class TopicsRelationManager extends RelationManager
                 //
             ])
             ->headerActions([
-                Tables\Actions\CreateAction::make(),
-                Tables\Actions\AssociateAction::make(),
+                Tables\Actions\ActionGroup::make([
+                    Tables\Actions\CreateAction::make(),
+                    Tables\Actions\AssociateAction::make(),
+                ]),
             ])
             ->actions([
                 Tables\Actions\ActionGroup::make([
