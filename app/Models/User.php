@@ -5,9 +5,11 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use App\Models\Plan;
 use App\Models\PlanCategory;
+use App\Models\ProgramUser;
 use App\Models\Project;
 use App\Models\Tag;
 use App\Models\Task;
+use App\Models\UserAssignment;
 use App\Models\UserSocialLink;
 use App\Traits\HasAvatar;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -15,11 +17,29 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Collection;
 use Laravel\Sanctum\HasApiTokens;
+use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable, HasAvatar;
+    use HasApiTokens, HasFactory, Notifiable, HasAvatar, HasRoles;
+
+    /* Roles */
+    public const ROLE_SUPER_ADMIN = 'Super Admin';
+    public const ROLE_PROJECT_MANAGER = 'Project Manager';
+    public const ROLE_TEAM_LEADER = 'Team Leader';
+    public const ROLE_TECHNICAL_TEAM_LEADER = 'Technical Team Leader';
+    public const ROLE_TRAINEE_SOFTWARE_ENGINEER = 'Trainee Software Engineer';
+
+    protected static function getRoles(): Collection
+    {
+        return collect([
+            self::ROLE_TEAM_LEADER,
+            self::ROLE_TECHNICAL_TEAM_LEADER,
+            self::ROLE_TRAINEE_SOFTWARE_ENGINEER,
+        ]);
+    }
 
     /**
      * The attributes that are mass assignable.
@@ -93,5 +113,15 @@ class User extends Authenticatable
     public function plan_categories(): HasMany
     {
         return $this->hasMany(PlanCategory::class);
+    }
+
+    public function programUsers(): HasMany
+    {
+        return $this->hasMany(ProgramUser::class);
+    }
+
+    public function userAssignments(): HasMany
+    {
+        return $this->hasMany(UserAssignment::class);
     }
 }

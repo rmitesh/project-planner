@@ -12,3 +12,11 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+
+Route::get('/', function() {
+    return view('welcome');
+});
+
+Route::get('login', function() {
+    return redirect()->route('filament.auth.login');
+})->name('login');
